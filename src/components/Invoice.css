@@ -1,7 +1,12 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 .invoice {
     max-width: 800px;
     margin: 0 auto;
-    /* padding: 5px; */
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
@@ -64,7 +69,7 @@
 
 .invoice-footer {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end !important;
     align-items: center;
     border-top: 1px solid #ccc;
     padding-top: 10px;
@@ -106,7 +111,7 @@ h3 {
     font-size: 14px;
     padding-right: 10px;
     font-weight: 600;
-    line-height: 0px;
+    line-height: 20px;
 }
 
 h3 p {

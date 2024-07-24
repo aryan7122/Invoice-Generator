@@ -58,14 +58,30 @@ const Invoice = ({ data }) => {
 
     const downloadPdf = () => {
         const input = document.getElementById('invoice');
-        html2canvas(input)
+        html2canvas(input, { scale: 2 })
             .then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                pdf.addImage(imgData, 'PNG', 0, 0);
+                const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for millimeters, 'a4' for A4 size
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 295; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
                 pdf.save("invoice.pdf");
             });
     };
+
 
     return (
         <>
@@ -119,6 +135,7 @@ const Invoice = ({ data }) => {
                         </div>
                     </div>
                 </div>
+                        <br />
 
                 <table>
                     <thead>
@@ -200,6 +217,7 @@ const Invoice = ({ data }) => {
                         <p>Authorised Signatory</p>
                     </div>
                 </div>
+                <p>Whether tax is payable under reverse charge- {data.reverseCharge}</p>
             </div>
             <button onClick={downloadPdf}>Download PDF</button>
             <br /> <br />
