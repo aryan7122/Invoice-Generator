@@ -1,0 +1,143 @@
+.invoice-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 40px 20px 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.invoice-form h2 {
+    margin-top: 20px;
+    color: #333;
+}
+
+.invoice-form input,
+.invoice-form select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.invoice-form button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.invoice-form button:hover {
+    background-color: #218838;
+}
+
+.invoice-form .invoice-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.invoice-form .invoice-item input {
+    width: calc(100% / 5 - 10px);
+}
+
+.invoice {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.invoice-header .logo img {
+    width: 150px;
+    height: auto;
+}
+
+.invoice-details {
+    text-align: right;
+}
+
+.invoice-details h2 {
+    margin: 0;
+    color: #333;
+}
+
+.invoice-details p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.invoice-section {
+    margin-bottom: 20px;
+}
+
+.invoice-section h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.invoice-section p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.invoice table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.invoice table th,
+.invoice table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    color: #333;
+}
+
+.invoice table th {
+    background-color: #f9f9f9;
+}
+
+.invoice-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 20px;
+}
+
+.signature {
+    text-align: center;
+}
+
+.signature img {
+    width: 150px;
+    height: auto;
+}
+
+.signature p {
+    margin: 5px 0;
+    color: #666;
+}

@@ -1,0 +1,84 @@
+.invoice {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.invoice-header .logo img {
+    width: 150px;
+    height: auto;
+}
+
+.invoice-header .invoice-details {
+    text-align: right;
+}
+
+.invoice-header .invoice-details h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.invoice-header .invoice-details p {
+    margin: 5px 0;
+}
+
+.invoice-section {
+    margin-bottom: 20px;
+}
+
+.invoice-section h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.invoice-section p {
+    margin: 5px 0;
+}
+
+.invoice table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.invoice table th,
+.invoice table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.invoice table th {
+    background-color: #f9f9f9;
+}
+
+.invoice-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 20px;
+}
+
+.signature img {
+    width: 100px;
+    height: auto;
+}
+
+.signature p {
+    margin: 5px 0;
+}
+ #invoice{
+    margin-bottom: 20px;
+ }
