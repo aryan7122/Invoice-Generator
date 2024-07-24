@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './Invoice.css';
+import numberToWords from 'number-to-words';
 
 const Invoice = ({ data }) => {
     console.log('data', data);
@@ -11,9 +12,9 @@ const Invoice = ({ data }) => {
     const billingDetails = data.billingDetails[0] || {};
     const shippingDetails = data.shippingDetails[0] || {};
     const orderDetails = data.orderDetails[0] || {};
-    // const placeOfSupply = data.placeOfSupply[0] || {};
-    // const placeOfDelivery = data.placeOfDelivery[0] || {};
-    // const invoiceDetails = data.invoiceDetails[0] || {};
+    // const placeOfSupply = data.placeOfSupply;
+    // const placeOfDelivery = data.placeOfDelivery;
+    const invoiceDetails = data.invoiceDetails[0] || {};
 
     // State to hold the calculated data
     const [calculatedData, setCalculatedData] = useState({
@@ -32,7 +33,7 @@ const Invoice = ({ data }) => {
                 const taxAmount = 1 * (item.taxAmount / 1);
 
                 const TaxAmount1 = netAmount - (netAmount * (1 - item.taxAmount / 100))
-                const TaxShipping =  (item.shippingCharges)- (item.shippingCharges * (1 - item.shippingTax / 100))  
+                const TaxShipping = (item.shippingCharges) - (item.shippingCharges * (1 - item.shippingTax / 100))
                 const totalShipping = shipppingAmount + parseFloat(TaxShipping)
                 const totalAmount = netAmount + TaxAmount1;
                 // console.log('totalShipping', typeof(shipppingAmount))
@@ -67,121 +68,142 @@ const Invoice = ({ data }) => {
     };
 
     return (
-        <div id="invoice" className="invoice">
-            <div className="invoice-header">
-                <div className="logo">
-                    {data.logo && <img src={data.logo} alt="Company Logo" />}
+        <>
+            <br />
+            <div id="invoice" className="invoice">
+                <div className="invoice-header">
+                    <div className="logo">
+                        {data.logo && <img src={data.logo} alt="Company Logo" />}
+                    </div>
                 </div>
-            </div>
-            <div className="invoice-section">
-                <h2>Sold By :</h2>
-                <p>{sellerDetails.address}</p>
-                <p>{sellerDetails.city}, {sellerDetails.state}, {sellerDetails.pincode}</p>
-                <h2>PAN No: {sellerDetails.pan}</h2>
-                <h2>GST Registration No: {sellerDetails.gst}</h2>
-            </div>
-            <div className="invoice-section">
-                <h2>Order No: {orderDetails.orderNo}</h2>
-                <h2>Order Date: {orderDetails.orderDate}</h2>
-            </div>
+                <div className="left_right">
+                    <div className="invoice-section">
+                        <div className="">
+                            <h2>Sold By :</h2>
+                            <p>{sellerDetails.address}</p>
+                            <p>{sellerDetails.city}, {sellerDetails.state}, {sellerDetails.pincode}</p>
+                        </div>
+                        <br />
+                        <div className="">
+                            <h3>PAN No: <p> {sellerDetails.pan}</p> </h3>
+                            <h3>GST Registration No:<p>{sellerDetails.gst}</p></h3>
+                        </div>
+                        <br />
+                        <div className="invoice-section">
+                            <h3>Order No: <p>{orderDetails.orderNo}</p> </h3>
+                            <h3>Order Date: <p> {orderDetails.orderDate}</p> </h3>
+                        </div>
+                    </div>
 
-            <div className="invoice-section">
-                <h2>Billing Address :</h2>
-                <p>{billingDetails.name}</p>
-                <p>{billingDetails.address}</p>
-                <p>{billingDetails.city}, {billingDetails.state}, {billingDetails.pincode}</p>
-                <p>State/UT Code: {billingDetails.stateCode}</p>
-            </div>
-            <div className="invoice-section">
-                <h2>Shipping Address</h2>
-                <p>{shippingDetails.name}</p>
-                <p>{shippingDetails.address}</p>
-                <p>{shippingDetails.city}, {shippingDetails.state}, {shippingDetails.pincode}</p>
-                <p>State/UT Code: {shippingDetails.stateCode}</p>
-            </div>
+                    <div className="right">
+                        <div className="invoice-section">
+                            <h2>Billing Address :</h2>
+                            <p>{billingDetails.name}</p>
+                            <p>{billingDetails.address}</p>
+                            <p>{billingDetails.city}, {billingDetails.state}, {billingDetails.pincode}</p>
+                            <h3>State/UT Code: <p>{billingDetails.stateCode}</p></h3>
+                        </div>
+                        <div className="invoice-section">
+                            <h2>Shipping Address</h2>
+                            <p>{shippingDetails.name}</p>
+                            <p>{shippingDetails.address}</p>
+                            <p>{shippingDetails.city}, {shippingDetails.state}, {shippingDetails.pincode}</p>
+                            <h3>State/UT Code: <p>{shippingDetails.stateCode}</p></h3>
+                        </div>
+                        <div className="invoice_">
+                            <h3>placeOf Delivery: <p>{data.placeOfDelivery}</p></h3>
+                            <h3>placeOf Supply: <p>{data.placeOfSupply}</p></h3>
+                            <h3>Invoice No: <p>{invoiceDetails.invoiceNo}</p></h3>
+                            <h3>Invoice Details: <p>{invoiceDetails.invoiceDetails}</p></h3>
+                            <h3>Invoice Date: <p>{invoiceDetails.invoiceDate}</p></h3>
+                        </div>
+                    </div>
+                </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sl. No.</th>
-                        <th>Description</th>
-                        <th>Unit Price</th>
-                        <th>Qty</th>
-                        <th>Discount</th>
-                        <th>Net Amount</th>
-                        <th>Tax Rate</th>
-                        <th>Tax Type</th>
-                        <th>Tax Amount</th>
-                        <th>Total Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {calculatedData.items.map((item, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{item.description}<br /> <br /> <br /> <br />Shipping Charges</td>
-                            <td>{item.unitPrice}<br /> <br /> <br /> <br /> <br /> <br />{item.shippingCharges}</td>
-                            <td>{item.quantity}<br /> <br /> <br /> <br /> <br /> <br /></td>
-                            <td>{item.discount}%<br /> <br /> <br /> <br /> <br /> <br /></td>
-                            <td>{item.netAmount}<br /> <br /> <br /> <br /> <br />{item.shippingCharges}</td>
-                            {/* <td>{item.taxAmount}%<br /> <br /> <br /> <br /> <br />{item.shippingTax}%</td> */}
-                            <td>
-                                {sellerDetails.state === billingDetails.state ? (
-                                    <>
-                                        <p>{item.taxAmount / 2}%</p>
-                                        <p>{item.taxAmount / 2}%</p>
-                                        <br />
-                                        <p>{item.shippingTax / 2}%</p>
-                                        <p>{item.shippingTax / 2}%</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p>IGST</p>
-                                        <br />
-                                        <p>IGST</p>
-                                    </>
-                                )}
-                            </td>
-                            <td>
-                                {sellerDetails.state === billingDetails.state ? (
-                                    <>
-                                        <p>CGST</p>
-                                        <p>SGST</p>
-                                        <br />
-                                        <p>CGST</p>
-                                        <p>SGST</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p>IGST</p>
-                                        <br />
-                                        <p>IGST</p>
-                                    </>
-                                )}
-                            </td>
-                            <td>{item.TaxAmount1}<br /> <br /> <br /> <br /> <br />{item.TaxShipping}</td>
-                            <td>{item.totalAmount}<br /> <br /> <br /> <br /> <br />{item.totalShipping}</td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sl. No.</th>
+                            <th>Description</th>
+                            <th>Unit Price</th>
+                            <th>Qty</th>
+                            <th>Discount</th>
+                            <th>Net Amount</th>
+                            <th>Tax Rate</th>
+                            <th>Tax Type</th>
+                            <th>Tax Amount</th>
+                            <th>Total Amount</th>
                         </tr>
-                    ))}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colSpan="8">Total</td>
-                        <td>{calculatedData.items.reduce((total, item) => total + parseFloat(item.TaxAmount1) + parseFloat(item.TaxShipping), 0).toFixed(2)}</td>
-                        <td>{calculatedData.items.reduce((total, item) => total + parseFloat(item.totalAmount) + parseFloat(item.totalShipping), 0).toFixed(2)}</td>
-                    </tr>
-                </tfoot>
-            </table>
-            <div className="invoice-footer">
-                <div className="signature">
-                    {data.signature && <img src={data.signature} alt="Signature" />}
-                    <p>For {sellerDetails.name}</p>
-                    <p>Authorised Signatory</p>
+                    </thead>
+                    <tbody>
+                        {calculatedData.items.map((item, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{item.description}<br /> <br /> <br /> <br />Shipping Charges</td>
+                                <td>{item.unitPrice}<br /> <br /> <br /> <br /> <br /> <br />{item.shippingCharges}</td>
+                                <td>{item.quantity}<br /> <br /> <br /> <br /> <br /> <br /></td>
+                                <td>{item.discount}%<br /> <br /> <br /> <br /> <br /> <br /></td>
+                                <td>{item.netAmount}<br /> <br /> <br /> <br /> <br />{item.shippingCharges}</td>
+                                {/* <td>{item.taxAmount}%<br /> <br /> <br /> <br /> <br />{item.shippingTax}%</td> */}
+                                <td>
+                                    {sellerDetails.state === billingDetails.state ? (
+                                        <>
+                                            <p>{item.taxAmount / 2}%</p>
+                                            <p>{item.taxAmount / 2}%</p>
+                                            <br />
+                                            <p>{item.shippingTax / 2}%</p>
+                                            <p>{item.shippingTax / 2}%</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p>IGST</p>
+                                            <br />
+                                            <p>IGST</p>
+                                        </>
+                                    )}
+                                </td>
+                                <td>
+                                    {sellerDetails.state === billingDetails.state ? (
+                                        <>
+                                            <p>CGST</p>
+                                            <p>SGST</p>
+                                            <br />
+                                            <p>CGST</p>
+                                            <p>SGST</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p>IGST</p>
+                                            <br />
+                                            <p>IGST</p>
+                                        </>
+                                    )}
+                                </td>
+                                <td>{item.TaxAmount1}<br /> <br /> <br /> <br /> <br />{item.TaxShipping}</td>
+                                <td>{item.totalAmount}<br /> <br /> <br /> <br /> <br />{item.totalShipping}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colSpan="8">Total</td>
+                            <td>{calculatedData.items.reduce((total, item) => total + parseFloat(item.TaxAmount1) + parseFloat(item.TaxShipping), 0).toFixed(2)}</td>
+                            <td>{calculatedData.items.reduce((total, item) => total + parseFloat(item.totalAmount) + parseFloat(item.totalShipping), 0).toFixed(2)}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <h4>Amount in Word: <br /> {numberToWords.toWords(calculatedData.items.reduce((total, item) => total + parseFloat(item.totalAmount) + parseFloat(item.totalShipping), 0).toFixed(2))}</h4>
+                <div className="invoice-footer">
+                    <div className="signature">
+                        <p>For {sellerDetails.name}</p>
+                        {data.signature && <img src={data.signature} alt="Signature" />}
+                        <p>Authorised Signatory</p>
+                    </div>
                 </div>
             </div>
             <button onClick={downloadPdf}>Download PDF</button>
-
-        </div>
+            <br /> <br />
+        </>
     );
 };
 

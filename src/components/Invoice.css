@@ -1,7 +1,7 @@
 .invoice {
     max-width: 800px;
     margin: 0 auto;
-    padding: 5px;
+    /* padding: 5px; */
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
@@ -64,7 +64,7 @@
 
 .invoice-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     border-top: 1px solid #ccc;
     padding-top: 10px;
@@ -79,6 +79,38 @@
 .signature p {
     margin: 5px 0;
 }
- #invoice{
+
+#invoice {
     margin-bottom: 20px;
- }
+}
+
+.left_right {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.right {
+    text-align: end;
+
+}
+
+.right .invoice-section h3 {
+    justify-content: end;
+
+}
+
+h3 {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding-right: 10px;
+    font-weight: 600;
+    line-height: 0px;
+}
+
+h3 p {
+    font-size: 14px;
+    padding-left: 10px;
+    font-weight: 400;
+}

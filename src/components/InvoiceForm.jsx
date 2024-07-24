@@ -10,7 +10,7 @@ const InvoiceForm = () => {
         placeOfSupply: '',
         placeOfDelivery: '',
         orderDetails: [{ orderNo: '', orderDate: '' }],
-        invoiceDetails: [{ invoiceNo: '', invoiceDate: '' }],
+        invoiceDetails: [{ invoiceNo: '', invoiceDate: '', invoiceDetails:'' }],
         reverseCharge: 'No',
         items: [],
         signature: '',
@@ -28,6 +28,11 @@ const InvoiceForm = () => {
                 items[itemIndex] = { ...items[itemIndex], [field]: value };
                 return { ...prevData, items };
             });
+        } else if (section === 'placeOfSupply' || section === 'placeOfDelivery') {
+            setFormData(prevData => ({
+                ...prevData,
+                [section]: value,
+            }));
         } else {
             setFormData(prevData => {
                 const sectionData = [...prevData[section]];
@@ -41,7 +46,10 @@ const InvoiceForm = () => {
         const { name, value } = e.target;
         setFormData(prevData => {
             const items = [...prevData.items];
-            items[index] = { ...items[index], [name]: value };
+            const netAmount = value.unitPrice * value.quantity - value.discount;
+            // const taxRate = formData.placeOfSupply === formData.placeOfDelivery ? 9 : 18;
+            // const taxAmount = netAmount * taxRate / 100;
+            items[index] = { ...items[index], [name]: value, netAmount };
             return { ...prevData, items };
         });
     };
@@ -57,22 +65,12 @@ const InvoiceForm = () => {
     const handleAddItem = () => {
         setFormData(prevData => ({
             ...prevData,
-            items: [...prevData.items, { description: '', unitPrice: '', quantity: '', discount: '', taxRate: '', taxAmount: '', shippingCharges: '', shippingTax: '' }],
+            items: [...prevData.items, { description: '', unitPrice: '', quantity: '', discount: '', shippingCharges: '', shippingTax: '', taxAmount:'' }],
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const updatedItems = formData.items.map(item => {
-            const netAmount = item.unitPrice * item.quantity - item.discount;
-            const taxRate = formData.placeOfSupply === formData.placeOfDelivery ? 9 : 18;
-            const taxAmount = netAmount * taxRate / 100;
-            return { ...item, netAmount, taxAmount };
-        });
-        setFormData(prevData => ({
-            ...prevData,
-            items: updatedItems,
-        }));
         setInvoiceData(formData);
     };
 
@@ -141,6 +139,7 @@ const InvoiceForm = () => {
                 {formData.invoiceDetails.map((detail, index) => (
                     <div key={index}>
                         <input type="text" name={`invoiceDetails.${index}.invoiceNo`} placeholder="Invoice No" value={detail.invoiceNo} onChange={handleChange} />
+                        <input type="text" name={`invoiceDetails.${index}.invoiceDetails`} placeholder="Invoice No" value={detail.invoiceDetails} onChange={handleChange} />
                         <input type="date" name={`invoiceDetails.${index}.invoiceDate`} placeholder="Invoice Date" value={detail.invoiceDate} onChange={handleChange} />
                     </div>
                 ))}
@@ -158,19 +157,13 @@ const InvoiceForm = () => {
                     <div key={index} className="item">
                         <input type="text" name="description" placeholder="Description" value={item.description} onChange={(e) => handleItemChange(index, e)} />
                         <input type="number" name="unitPrice" placeholder="Unit Price" value={item.unitPrice} onChange={(e) => handleItemChange(index, e)} />
+                        <input type="number" name="taxAmount" placeholder="Unit Tax Rate" value={item.taxAmount} onChange={(e) => handleItemChange(index, e)} />
                         <input type="number" name="quantity" placeholder="Quantity" value={item.quantity} onChange={(e) => handleItemChange(index, e)} />
                         <input type="number" name="discount" placeholder="Discount" value={item.discount} onChange={(e) => handleItemChange(index, e)} />
-                        <input type="number" name="taxAmount" placeholder="GST Rates (%)" value={item.taxAmount} onChange={(e) => handleItemChange(index, e)} />
                         <input type="number" name="shippingCharges" placeholder="Shipping Charges" value={item.shippingCharges} onChange={(e) => handleItemChange(index, e)} />
-                        <input type="number" name="shippingTax" placeholder="Shipping: Tax Rates (%) " value={item.shippingTax} onChange={(e) => handleItemChange(index, e)} />
-                        <br />
-                        <button type="button" onClick={() => setFormData(prevData => ({
-                            ...prevData,
-                            items: prevData.items.filter((_, i) => i !== index)
-                        }))}>Remove Item</button>
+                        <input type="number" name="shippingTax" placeholder="Shipping Tax Rate"  value={item.shippingTax} onChange={(e) => handleItemChange(index, e)} />
                     </div>
                 ))}
-                <br />
                 <button type="button" onClick={handleAddItem}>Add Item</button>
 
                 {/* Signature */}
@@ -181,9 +174,11 @@ const InvoiceForm = () => {
                 <h2>Logo</h2>
                 <input type="file" name="logo" onChange={handleFileChange} />
 
+                {/* Submit Button */}
                 <button type="submit">Generate Invoice</button>
             </form>
 
+            {/* Invoice Display */}
             {invoiceData && <Invoice data={invoiceData} />}
         </div>
     );
