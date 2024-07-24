@@ -166,9 +166,11 @@ const Invoice = ({ data }) => {
                                     {sellerDetails.state === billingDetails.state ? (
                                         <>
                                             <p>{item.taxAmount / 2}%</p>
+                                            <br />
                                             <p>{item.taxAmount / 2}%</p>
                                             <br />
                                             <p>{item.shippingTax / 2}%</p>
+                                            <br />
                                             <p>{item.shippingTax / 2}%</p>
                                         </>
                                     ) : (
@@ -183,9 +185,11 @@ const Invoice = ({ data }) => {
                                     {sellerDetails.state === billingDetails.state ? (
                                         <>
                                             <p>CGST</p>
+                                            <br />
                                             <p>SGST</p>
                                             <br />
                                             <p>CGST</p>
+                                            <br />
                                             <p>SGST</p>
                                         </>
                                     ) : (
