@@ -139,7 +139,7 @@ const InvoiceForm = () => {
                 {formData.invoiceDetails.map((detail, index) => (
                     <div key={index}>
                         <input type="text" name={`invoiceDetails.${index}.invoiceNo`} placeholder="Invoice No" value={detail.invoiceNo} onChange={handleChange} />
-                        <input type="text" name={`invoiceDetails.${index}.invoiceDetails`} placeholder="Invoice No" value={detail.invoiceDetails} onChange={handleChange} />
+                        <input type="text" name={`invoiceDetails.${index}.invoiceDetails`} placeholder="Invoice Details" value={detail.invoiceDetails} onChange={handleChange} />
                         <input type="date" name={`invoiceDetails.${index}.invoiceDate`} placeholder="Invoice Date" value={detail.invoiceDate} onChange={handleChange} />
                     </div>
                 ))}
