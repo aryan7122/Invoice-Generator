@@ -173,9 +173,9 @@ const Invoice = ({ data }) => {
                                         </>
                                     ) : (
                                         <>
-                                            <p>IGST</p>
-                                            <br />
-                                            <p>IGST</p>
+                                                <p>{item.taxAmount}</p>
+                                            <br /> <br /> <br /> <br />
+                                                <p>{item.shippingTax}</p>
                                         </>
                                     )}
                                 </td>
@@ -191,7 +191,7 @@ const Invoice = ({ data }) => {
                                     ) : (
                                         <>
                                             <p>IGST</p>
-                                            <br />
+                                            <br /> <br />  <br /> <br />
                                             <p>IGST</p>
                                         </>
                                     )}
